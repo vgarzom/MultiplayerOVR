@@ -49,5 +49,6 @@ public class ShadowPlayer : MonoBehaviourPun, IPunObservable
 
     public void SetId(string _id) {
         this.id = _id;
+        gameObject.name = "ShadowPlayer_" + this.id;
     }
 }

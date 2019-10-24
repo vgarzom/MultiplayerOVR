@@ -47,10 +47,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
     override public void OnJoinedRoom()
     {
 
-        PhotonNetwork.Instantiate("NetworkedPlayer", Vector3.zero, Quaternion.identity, 0);
+        GameObject player = PhotonNetwork.Instantiate("NetworkedPlayer", Vector3.zero, Quaternion.identity, 0);
 
         GameObject shadow = PhotonNetwork.Instantiate("ShadowPlayer", Vector3.zero, Quaternion.identity, 0);
         shadow.GetComponent<ShadowPlayer>().SetId(PhotonNetwork.CurrentRoom.PlayerCount.ToString());
+        player.GetComponent<NetworkedPlayer>().SetShadow(shadow.GetComponent<ShadowPlayer>());
 
         Debug.Log("Joined to room");
     }

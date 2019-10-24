@@ -14,6 +14,9 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
     [SerializeField]
     private Transform playerLocal;
 
+    [SerializeField]
+    private ShadowPlayer shadow;
+
     private Vector3 initialPosition = Vector3.zero;
 
     // Start is called before the first frame update
@@ -36,8 +39,11 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        
+        Vector3 deltaPosition = playerGlobal.position - this.initialPosition;
+        this.shadow.AddPosition(deltaPosition);
+        this.initialPosition = playerGlobal.position;
     }
+
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -56,5 +62,9 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
             avatar.transform.localRotation = (Quaternion)stream.ReceiveNext();
             this.initialPosition = (Vector3)stream.ReceiveNext();
         }
+    }
+
+    public void SetShadow(ShadowPlayer _shadow) {
+        this.shadow = _shadow;
     }
 }

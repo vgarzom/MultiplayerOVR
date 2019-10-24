@@ -52,7 +52,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 114520922422682894}
-  viewIdField: 0
+  viewIdField: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &114520922422682894
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d1deea868d8467bacfec40922e7255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatar: {fileID: 0}
+  avatar: {fileID: 7983995614798143764}
   playerGlobal: {fileID: 0}
   playerLocal: {fileID: 0}
 --- !u!1001 &7983995614798038922
@@ -139,6 +139,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1fd2963e35ed24ba89705127fca0fba1, type: 3}
+--- !u!1 &7983995614798143764 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 108190, guid: 1fd2963e35ed24ba89705127fca0fba1,
+    type: 3}
+  m_PrefabInstance: {fileID: 7983995614798038922}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7983995614798479632 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 476826, guid: 1fd2963e35ed24ba89705127fca0fba1,

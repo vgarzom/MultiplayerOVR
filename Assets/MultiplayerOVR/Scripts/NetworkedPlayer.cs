@@ -41,9 +41,10 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
     {
         if (photonView.IsMine)
         {
-            Vector3 deltaPosition = playerGlobal.position - this.initialPosition;
+            Vector3 deltaPosition = playerLocal.localPosition - this.initialPosition;
+            deltaPosition.y = 0;
             this.shadow.AddPosition(deltaPosition);
-            this.initialPosition = playerGlobal.position;
+            this.initialPosition = playerLocal.localPosition;
         }
     }
 

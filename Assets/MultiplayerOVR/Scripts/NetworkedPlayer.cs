@@ -25,7 +25,7 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
             playerLocal = playerGlobal.Find("OVRCameraRig/TrackingSpace/CenterEyeAnchor");
 
             transform.SetParent(playerLocal);
-            transform.localPosition = new Vector3(0, 0.5f, 0);
+            transform.localPosition = Vector3.zero;
         }
     }
 

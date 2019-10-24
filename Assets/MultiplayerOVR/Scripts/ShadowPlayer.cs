@@ -16,8 +16,9 @@ public class ShadowPlayer : MonoBehaviourPun, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-        initialPosition = Vector3.zero;
+        initialPosition = new Vector3(Random.Range(-15,15), 0, Random.Range(-15,15));
         currentPosition = new Vector3(initialPosition.x, initialPosition.y, initialPosition.z);
+        transform.position = this.currentPosition;
     }
 
     // Update is called once per frame
@@ -39,11 +40,18 @@ public class ShadowPlayer : MonoBehaviourPun, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(this.id);
+            stream.SendNext(this.initialPosition);
+            stream.SendNext(this.currentPosition);
         }
 
         else
         {
-            this.id = (string)stream.ReceiveNext();
+            SetId((string)stream.ReceiveNext());
+
+            this.initialPosition = (Vector3)stream.ReceiveNext();
+
+            this.currentPosition = (Vector3)stream.ReceiveNext();
+            transform.position = this.currentPosition;
         }
     }
 

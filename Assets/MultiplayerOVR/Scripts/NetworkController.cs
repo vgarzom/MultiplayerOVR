@@ -49,6 +49,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
         float x = Random.Range(-15.0f, 15.0f);
         float z = Random.Range(-15.0f, 15.0f);
         PhotonNetwork.Instantiate("NetworkedPlayer", new Vector3(x, 1.0f, z), Quaternion.identity, 0);
+
+        GameObject shadow = PhotonNetwork.Instantiate("ShadowPlayer", Vector3.zero, Quaternion.identity, 0);
+        shadow.GetComponent<ShadowPlayer>().SetId(PhotonNetwork.CurrentRoom.PlayerCount.ToString());
+
         Debug.Log("Joined to room");
     }
 }

@@ -39,9 +39,12 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        Vector3 deltaPosition = playerGlobal.position - this.initialPosition;
-        this.shadow.AddPosition(deltaPosition);
-        this.initialPosition = playerGlobal.position;
+        if (photonView.IsMine)
+        {
+            Vector3 deltaPosition = playerGlobal.position - this.initialPosition;
+            this.shadow.AddPosition(deltaPosition);
+            this.initialPosition = playerGlobal.position;
+        }
     }
 
 

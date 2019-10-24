@@ -14,6 +14,8 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
     [SerializeField]
     private Transform playerLocal;
 
+    private Vector3 initialPosition = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,9 +23,12 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
 
         if (photonView.IsMine)
         {
-            playerGlobal = GameObject.Find("OVRPlayerController").transform;
-            playerLocal = playerGlobal.Find("OVRCameraRig/TrackingSpace/CenterEyeAnchor");
+            this.initialPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
+            playerGlobal = GameObject.Find("OVRPlayerController").transform;
+            playerGlobal.position = this.initialPosition;
+
+            playerLocal = playerGlobal.Find("OVRCameraRig/TrackingSpace/CenterEyeAnchor");
             transform.SetParent(playerLocal);
         }
     }
@@ -41,6 +46,7 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
             stream.SendNext(playerGlobal.rotation);
             stream.SendNext(playerLocal.localPosition);
             stream.SendNext(playerLocal.localRotation);
+            stream.SendNext(this.initialPosition);
         }
 
         else {
@@ -48,6 +54,7 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
             this.transform.rotation = (Quaternion)stream.ReceiveNext();
             avatar.transform.localPosition = (Vector3)stream.ReceiveNext();
             avatar.transform.localRotation = (Quaternion)stream.ReceiveNext();
+            this.initialPosition = (Vector3)stream.ReceiveNext();
         }
     }
 }

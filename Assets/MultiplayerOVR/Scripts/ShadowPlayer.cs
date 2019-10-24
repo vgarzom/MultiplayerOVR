@@ -16,9 +16,12 @@ public class ShadowPlayer : MonoBehaviourPun, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-        initialPosition = new Vector3(Random.Range(-15,15), 0, Random.Range(-15,15));
-        currentPosition = new Vector3(initialPosition.x, initialPosition.y, initialPosition.z);
-        transform.position = this.currentPosition;
+        if (photonView.IsMine)
+        {
+            initialPosition = new Vector3(Random.Range(-15, 15), 0, Random.Range(-15, 15));
+            currentPosition = new Vector3(initialPosition.x, initialPosition.y, initialPosition.z);
+            transform.position = this.currentPosition;
+        }
     }
 
     // Update is called once per frame
@@ -32,7 +35,7 @@ public class ShadowPlayer : MonoBehaviourPun, IPunObservable
         currentPosition.y += deltaPosition.y;
         currentPosition.z += deltaPosition.z;
 
-
+        transform.position = currentPosition;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

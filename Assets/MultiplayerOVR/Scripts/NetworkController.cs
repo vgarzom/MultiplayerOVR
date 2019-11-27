@@ -18,7 +18,13 @@ public class NetworkController : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        if (PhotonNetwork.IsConnected) {
+        
+
+    }
+
+    public void startConnection() {
+        if (PhotonNetwork.IsConnected)
+        {
             JoinRoom();
         }
         else
@@ -27,7 +33,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
             PhotonNetwork.GameVersion = "1.0";
             PhotonNetwork.ConnectUsingSettings();
         }
-
     }
 
     void JoinRoom() {

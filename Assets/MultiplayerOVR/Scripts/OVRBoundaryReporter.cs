@@ -26,7 +26,7 @@ public class OVRBoundaryReporter : MonoBehaviour
         //this.oVRBoundary.SetLookAndFeel(lookAndFeel);
 
         //int index = 0;
-        float minX = 1000;
+        /*float minX = 1000;
         float maxX = -1000;
         float minZ = 1000;
         float maxZ = -1000;
@@ -42,7 +42,7 @@ public class OVRBoundaryReporter : MonoBehaviour
 
         Debug.Log("Outer Boundary Min" + this.boundaryMinLimit );
         Debug.Log("Outer Boundary Max" + this.boundaryMaxLimit);
-
+        */
     }
 
     // Update is called once per frame

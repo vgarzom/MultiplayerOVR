@@ -7,11 +7,13 @@ using Photon.Realtime;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
-    string _room = "multiplayerOVR";
+    public string _room = "multiplayerOVR2";
 
     [Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
     [SerializeField]
-    private byte maxPlayersPerRoom = 4;
+    private byte maxPlayersPerRoom = 20;
+
+    TypedLobby lobby = new TypedLobby("MyLobby", LobbyType.Default);
 
     // Start is called before the first frame update
     void Start()
@@ -30,28 +32,30 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     void JoinRoom() {
         RoomOptions roomOptions = new RoomOptions() { MaxPlayers = maxPlayersPerRoom };
-        PhotonNetwork.JoinOrCreateRoom(_room, roomOptions, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom(_room, roomOptions, lobby);
     }
 
     public override void OnConnectedToMaster()
     {
         Debug.Log("Just connected to master!");
-        JoinRoom();
+        PhotonNetwork.JoinLobby(lobby);
     }
 
     override public void OnJoinedLobby()
     {
         Debug.Log("Just Joined to Lobby!");
+
+        JoinRoom();
     }
 
     override public void OnJoinedRoom()
     {
-
+        Debug.Log("just New user joined to room...");
         GameObject player = PhotonNetwork.Instantiate("NetworkedPlayer", Vector3.zero, Quaternion.identity, 0);
 
-        GameObject shadow = PhotonNetwork.Instantiate("ShadowPlayer", Vector3.zero, Quaternion.identity, 0);
-        shadow.GetComponent<ShadowPlayer>().SetId(PhotonNetwork.CurrentRoom.PlayerCount.ToString());
-        player.GetComponent<NetworkedPlayer>().SetShadow(shadow.GetComponent<ShadowPlayer>());
+        //GameObject shadow = PhotonNetwork.Instantiate("ShadowPlayer", Vector3.zero, Quaternion.identity, 0);
+        //shadow.GetComponent<ShadowPlayer>().SetId(PhotonNetwork.CurrentRoom.PlayerCount.ToString());
+        //player.GetComponent<NetworkedPlayer>().SetShadow(shadow.GetComponent<ShadowPlayer>());
 
         Debug.Log("Joined to room");
     }

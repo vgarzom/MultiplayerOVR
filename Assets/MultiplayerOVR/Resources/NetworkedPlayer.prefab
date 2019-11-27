@@ -70,6 +70,8 @@ MonoBehaviour:
   avatar: {fileID: 7983995614798143764}
   playerGlobal: {fileID: 0}
   playerLocal: {fileID: 0}
+  shadow: {fileID: 0}
+  currentBoundary: {fileID: 0}
 --- !u!1001 &7983995614798038922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87,7 +89,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 476826, guid: 1fd2963e35ed24ba89705127fca0fba1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.87
       objectReference: {fileID: 0}
     - target: {fileID: 476826, guid: 1fd2963e35ed24ba89705127fca0fba1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -127,15 +129,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 476826, guid: 1fd2963e35ed24ba89705127fca0fba1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 476826, guid: 1fd2963e35ed24ba89705127fca0fba1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 476826, guid: 1fd2963e35ed24ba89705127fca0fba1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1fd2963e35ed24ba89705127fca0fba1, type: 3}

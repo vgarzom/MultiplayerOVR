@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
+public class NetworkedPlayer : Photon.Pun.MonoBehaviourPun, IPunObservable
 {
     [SerializeField]
     private GameObject avatar;
@@ -17,13 +17,16 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
     [SerializeField]
     private ShadowPlayer shadow;
 
+    [SerializeField]
+    private OVRBoundaryReporter currentBoundary;
+
     private Vector3 initialPosition = Vector3.zero;
 
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Networked player has been instantiated!");
-
+        currentBoundary = GameObject.Find("OVRBoundaryReporter").GetComponent<OVRBoundaryReporter>();
         if (photonView.IsMine)
         {
             this.initialPosition = new Vector3(0.0f, 0.0f, 0.0f);
@@ -43,7 +46,7 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
         {
             Vector3 deltaPosition = playerLocal.localPosition - this.initialPosition;
             deltaPosition.y = 0;
-            this.shadow.AddPosition(deltaPosition);
+            //this.shadow.AddPosition(deltaPosition);
             this.initialPosition = playerLocal.localPosition;
         }
     }
@@ -51,20 +54,55 @@ public class NetworkedPlayer : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+        Debug.Log("trying to send...");
+        if (currentBoundary != null) {
+            float w = Mathf.Abs(currentBoundary.boundaryMaxLimit.x - currentBoundary.boundaryMinLimit.x);
+            float h = Mathf.Abs(currentBoundary.boundaryMaxLimit.z - currentBoundary.boundaryMinLimit.z);
+
         if(stream.IsWriting) {
-            stream.SendNext(playerGlobal.position);
-            stream.SendNext(playerGlobal.rotation);
+            //stream.SendNext(playerGlobal.position);
+            //stream.SendNext(playerGlobal.rotation);
             stream.SendNext(playerLocal.localPosition);
-            stream.SendNext(playerLocal.localRotation);
-            stream.SendNext(this.initialPosition);
+                //stream.SendNext(playerLocal.localRotation);
+                //stream.SendNext(this.initialPosition);
+                float x = (2 * playerLocal.position.x / w) + (2 * currentBoundary.boundaryMinLimit.x / w) + 1;
+                float z = (2 * playerLocal.position.z / h) + (2 * currentBoundary.boundaryMinLimit.z / h) + 1;
+
+                Debug.Log("sending --> (x,z) (" + x + ", " + z + ")");
+
+                
+                    stream.SendNext(new Vector3(x, playerLocal.position.y, z));
+                
         }
 
-        else {
-            this.transform.position = (Vector3)stream.ReceiveNext();
-            this.transform.rotation = (Quaternion)stream.ReceiveNext();
-            avatar.transform.localPosition = (Vector3)stream.ReceiveNext();
-            avatar.transform.localRotation = (Quaternion)stream.ReceiveNext();
-            this.initialPosition = (Vector3)stream.ReceiveNext();
+        else if (stream.IsReading) {
+                //Vector3 pos = (Vector3)stream.ReceiveNext();
+                //Vector3 minBoundary = (Vector3)stream.ReceiveNext();
+                //Vector3 maxBoundary = (Vector3)stream.ReceiveNext();
+                Vector3 pos0 = (Vector3)stream.ReceiveNext();
+
+                Debug.Log("receiving --> (x,z) (" + pos0.x + ", " + pos0.z + ")");
+
+                float x = (w / 2) * (pos0.x - 1) - currentBoundary.boundaryMinLimit.x;
+                float z = (h / 2) * (pos0.z - 1) - currentBoundary.boundaryMinLimit.z;
+
+                //Linear transformation of boundaries
+                /*float mx = (maxBoundary.x - currentBoundary.boundaryMaxLimit.x) / (minBoundary.x - currentBoundary.boundaryMinLimit.x);
+                float mz = (maxBoundary.z - currentBoundary.boundaryMaxLimit.z) / (minBoundary.z - currentBoundary.boundaryMinLimit.z);
+
+                float bx = minBoundary.x - mx * currentBoundary.boundaryMinLimit.x;
+                float bz = minBoundary.z - mz * currentBoundary.boundaryMinLimit.z;
+                */
+                if (!photonView.IsMine)
+                {
+                    this.transform.localPosition = new Vector3(x, 1.0f, z);
+                }
+
+            //this.transform.rotation = (Quaternion)stream.ReceiveNext();
+            //avatar.transform.localPosition = (Vector3)stream.ReceiveNext();
+            //avatar.transform.localRotation = (Quaternion)stream.ReceiveNext();
+            //this.initialPosition = (Vector3)stream.ReceiveNext();
+        }
         }
     }
 

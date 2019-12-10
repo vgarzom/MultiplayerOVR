@@ -30,7 +30,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
         else
         {
             Debug.Log("Trying to connect to photon server...");
-            PhotonNetwork.GameVersion = "1.0";
+            PhotonNetwork.GameVersion = "2.0";
             PhotonNetwork.ConnectUsingSettings();
         }
     }

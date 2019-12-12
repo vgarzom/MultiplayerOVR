@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 using Photon.Pun;
 using Photon.Realtime;
@@ -8,6 +9,8 @@ using Photon.Realtime;
 public class NetworkController : MonoBehaviourPunCallbacks
 {
     public string _room = "multiplayerOVR2";
+    public GameObject infoPanel;
+    public Text infoText;
 
     [Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
     [SerializeField]
@@ -23,6 +26,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
 
     public void startConnection() {
+        infoText.text = "Iniciando conexión al servidor";
         if (PhotonNetwork.IsConnected)
         {
             JoinRoom();
@@ -43,12 +47,14 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("Just connected to master!");
+        infoText.text = "Conexión al servidor completa. Conectando al lobby...";
         PhotonNetwork.JoinLobby(lobby);
     }
 
     override public void OnJoinedLobby()
     {
         Debug.Log("Just Joined to Lobby!");
+        infoText.text = "Conectando al salón";
 
         JoinRoom();
     }
@@ -63,5 +69,16 @@ public class NetworkController : MonoBehaviourPunCallbacks
         //player.GetComponent<NetworkedPlayer>().SetShadow(shadow.GetComponent<ShadowPlayer>());
 
         Debug.Log("Joined to room");
+
+        infoText.text = "Conexión completa";
+        StartCoroutine(HidePanel());
+    }
+
+    IEnumerator HidePanel()
+    {
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(3);
+
+        infoPanel.SetActive(false);
     }
 }

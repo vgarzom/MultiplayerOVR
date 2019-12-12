@@ -19,42 +19,13 @@ public class InputController : MonoBehaviour
     {
         currentStep = Step.Started;
         StartCoroutine(NextStep());
+
+        text.text = "Iniciando...";
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (currentStep) {
-            case Step.Started:
-                text.text = "Iniciando...";
-                break;
-            case Step.Control_1:
-                text.text = "Ubícate en el primer punto de control y presiona cualquier botón.";
-                break;
-
-            case Step.Setting_1:
-                text.text = "Fijando punto de control 1... ";
-                break;
-
-            case Step.Control_2:
-                text.text = "Ubícate en el segundo punto de control y presiona cualquier botón.";
-                break;
-
-            case Step.Setting_2:
-                text.text = "Fijando punto de control 2... ";
-                break;
-            case Step.Central:
-                text.text = "Ubicate en el punto central y presiona cualquier botón";
-                break;
-            case Step.Connect:
-                text.text = "Gracias... Conectando";
-                break;
-            case Step.Connected:
-                text.text = "Conexión completa";
-                break;
-            default:
-                break;
-        }
 
         if (OVRInput.GetDown(OVRInput.Button.Any))
         {
@@ -64,6 +35,7 @@ public class InputController : MonoBehaviour
                 Debug.Log("First control step set");
                 boundaryReporter.boundaryMaxLimit = playerPosition.localPosition;
                 currentStep = Step.Setting_1;
+                text.text = "Fijando punto de control 1... ";
                 StartCoroutine(NextStep());
             }
 
@@ -72,6 +44,7 @@ public class InputController : MonoBehaviour
                 Debug.Log("Second control step set");
                 boundaryReporter.boundaryMinLimit = playerPosition.localPosition;
                 currentStep = Step.Setting_2;
+                text.text = "Fijando punto de control 2... ";
                 StartCoroutine(NextStep());
             }
 
@@ -79,8 +52,9 @@ public class InputController : MonoBehaviour
             {
                 Debug.Log("Central point step set");
                 currentStep = Step.Connect;
+                text.text = "Gracias... Conectando";
                 networkController.startConnection();
-                StartCoroutine(NextStep());
+                //StartCoroutine(NextStep());
             }
         }
         
@@ -100,12 +74,15 @@ public class InputController : MonoBehaviour
         {
             case Step.Started:
                 currentStep = Step.Control_1;
+                text.text = "Ubícate en el primer punto de control y presiona cualquier botón.";
                 break;
             case Step.Setting_1:
                 currentStep = Step.Control_2;
+                text.text = "Ubícate en el segundo punto de control y presiona cualquier botón.";
                 break;
             case Step.Setting_2:
                 currentStep = Step.Central;
+                text.text = "Ubicate en el punto central y presiona cualquier botón";
                 break;
             case Step.Connect:
                 currentStep = Step.Connected;
